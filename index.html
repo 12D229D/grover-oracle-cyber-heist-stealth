@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grover Oracle: Cyber-Heist & Amplitude Amplification Stealth</title>
+  <meta name="description" content="Videojuego de infiltración táctica cyberpunk basado en el algoritmo de búsqueda cuántica de Grover O(sqrt(N)) y amplificación de amplitud.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- HUD Header Superior -->
+  <header class="hud-header">
+    <div class="brand-section">
+      <h1 class="brand-title">GROVER // CYBER-HEIST</h1>
+      <span class="brand-badge">CAPA 4: COMPUTACIÓN CUÁNTICA</span>
+    </div>
+
+    <div class="hud-telemetry">
+      <div class="telemetry-item">
+        <span class="telemetry-label">Espacio Hilbert</span>
+        <span class="telemetry-value" id="lblStates">2^4 = 16</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="telemetry-label">Iteraciones G</span>
+        <span class="telemetry-value"><span id="lblIter">0</span> / <span id="lblOptimal" style="color:var(--accent-gold);">3</span></span>
+      </div>
+      <div class="telemetry-item">
+        <span class="telemetry-label">P(Éxito Cuántico)</span>
+        <span class="telemetry-value" id="lblSuccessProb" style="color:var(--accent-matrix-green);">6.2%</span>
+      </div>
+      <div class="telemetry-item">
+        <span class="telemetry-label">Botín Criptográfico</span>
+        <span class="telemetry-value" id="lblScore">0 PTS</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Principal -->
+  <main class="main-dashboard">
+    <!-- Columna Izquierda: Red Matricial & Osciloscopio de Grover -->
+    <section class="viewport-column">
+      <!-- Tarjeta Canvas Topología de Servidores -->
+      <article class="panel-card">
+        <header class="panel-header">
+          <div class="panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+            MATRIZ TOPOLÓGICA DE SERVIDORES (N = 2^n)
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <label for="selectQubits" style="font-size:0.7rem;font-family:var(--font-mono);color:var(--text-muted);">REGISTRO:</label>
+            <select id="selectQubits" style="background:var(--bg-tertiary);border:1px solid var(--border-subtle);color:var(--text-main);font-family:var(--font-mono);font-size:0.75rem;padding:0.2rem 0.4rem;border-radius:4px;">
+              <option value="3">3 Qubits (N = 8)</option>
+              <option value="4" selected>4 Qubits (N = 16)</option>
+              <option value="5">5 Qubits (N = 32)</option>
+            </select>
+          </div>
+        </header>
+
+        <div class="canvas-container">
+          <canvas id="networkCanvas"></canvas>
+          <div class="canvas-overlay-legend">
+            <div class="legend-item"><span class="legend-dot dot-vault"></span> Bóveda f(x)=1</div>
+            <div class="legend-item"><span class="legend-dot dot-intel"></span> Terminal Pistas</div>
+            <div class="legend-item"><span class="legend-dot dot-honeypot"></span> Honeypot ICE</div>
+            <div class="legend-item"><span class="legend-dot dot-decoy"></span> Servidor Señuelo</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Osciloscopio de Inversión sobre la Media (U_s) -->
+      <article class="panel-card oscilloscope-section">
+        <header class="panel-header" style="background:transparent;border-bottom:none;padding-bottom:0.4rem;">
+          <div class="panel-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h5l3 8 4-16 3 8h5"/></svg>
+            OSCILOSCOPIO DE AMPLITUDES (INVERSIÓN SOBRE LA MEDIA U_s = 2|s⟩⟨s| - I)
+          </div>
+          <span id="lblEngineStatus" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--accent-cyan);">Superposición Uniforme</span>
+        </header>
+
+        <div class="amplitude-bars-container" id="ampBarsContainer">
+          <div class="mean-indicator-line" id="meanLine" title="Media Aritmética de Amplitudes (μ)"></div>
+          <!-- Barras inyectadas dinámicamente -->
+        </div>
+      </article>
+    </section>
+
+    <!-- Columna Derecha: Controles Tácticos, Sigilo y Oráculo -->
+    <aside class="controls-column">
+      <!-- Cortafuegos IDS y Nivel de Detección -->
+      <article class="panel-card ids-alert-container">
+        <div class="alert-status-row">
+          <span>ALERTA FIREWALL IDS</span>
+          <span id="lblAlertPercent">0%</span>
+        </div>
+        <div class="alert-progress-bg">
+          <div class="alert-progress-fill" id="alertFill"></div>
+        </div>
+        <div class="alert-status-row">
+          <span style="color:var(--text-dim);">PERFIL TÁCTICO:</span>
+          <span id="lblStealthRank" style="font-weight:700;">GHOST</span>
+        </div>
+      </article>
+
+      <!-- Panel del Oráculo de Fase Booleano -->
+      <article class="panel-card oracle-box">
+        <header style="display:flex;justify-content:space-between;align-items:center;">
+          <h2 style="font-family:var(--font-display);font-size:0.8rem;letter-spacing:0.8px;">ORÁCULO BOOLEANO Û_ω</h2>
+          <span id="lblOracleStatus" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--accent-cyan);">0 Pistas</span>
+        </header>
+        <div class="clues-list" id="cluesList">
+          <!-- Lista de restricciones SAT descubiertas -->
+        </div>
+      </article>
+
+      <!-- Dial Geométrico 2D del Espacio de Hilbert -->
+      <article class="panel-card geometric-state-view">
+        <div class="dial-caption">ROTACIÓN GEOMÉTRICA EN EL PLANO (|ω_⊥⟩, |ω⟩)</div>
+        <div class="dial-canvas-wrapper">
+          <canvas id="dialCanvas"></canvas>
+        </div>
+        <div class="dial-caption" style="color:var(--text-dim);">Ángulo de Grover: θ_k = (2k + 1) · arcsin(√(M/N))</div>
+      </article>
+
+      <!-- Botonera Táctica -->
+      <article class="panel-card">
+        <div class="action-grid">
+          <button class="cyber-btn cyber-btn-primary" id="btnQuantumStep" title="Aplica U_ω y luego el difusor U_s con huella de intrusión O(√N)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            PULSO CUÁNTICO (GROVER G)
+          </button>
+          
+          <button class="cyber-btn cyber-btn-extract" id="btnMeasure" title="Realiza una medición en la base computacional">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg>
+            MEDICIÓN & EXTRACCIÓN
+          </button>
+
+          <button class="cyber-btn" id="btnClassicScan" title="Escaneo físico secuencial O(N): genera alta alarma IDS">
+            SONDA CLÁSICA O(N)
+          </button>
+
+          <button class="cyber-btn cyber-btn-danger" id="btnResetGrover" title="Reinicia la función de onda a superposición uniforme |s>">
+            REINICIAR A |s⟩
+          </button>
+
+          <button class="cyber-btn" id="btnNextMission" style="grid-column:span 2;">
+            NUEVA MISIÓN PROCEDURAL
+          </button>
+        </div>
+      </article>
+
+      <!-- Exportador OpenQASM 3.0 / Cirq -->
+      <article class="panel-card" style="padding:0.75rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <h2 style="font-family:var(--font-display);font-size:0.75rem;">CIRCUITO CUÁNTICO</h2>
+          <div style="display:flex;gap:0.3rem;">
+            <button class="cyber-btn" id="btnExportQASM" style="padding:0.2rem 0.4rem;font-size:0.65rem;">QASM 3</button>
+            <button class="cyber-btn" id="btnExportCirq" style="padding:0.2rem 0.4rem;font-size:0.65rem;">Cirq</button>
+            <button class="cyber-btn" id="btnExportQiskit" style="padding:0.2rem 0.4rem;font-size:0.65rem;">Qiskit</button>
+          </div>
+        </div>
+        <pre class="code-preview-box" id="codeOutput"></pre>
+      </article>
+    </aside>
+  </main>
+
+  <!-- Modal Táctico de Fin de Ronda -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card" id="modalCard">
+      <h2 class="modal-title" id="modalTitle">INFORME DE MISIÓN</h2>
+      <p class="modal-body" id="modalBody">Detalles de la operación...</p>
+      <button class="cyber-btn cyber-btn-primary" id="btnModalAction">CONTINUAR</button>
+    </div>
+  </div>
+
+  <!-- Footer Táctico -->
+  <footer class="hud-footer">
+    <span>GROVER CYBER-HEIST // CAPA 4 CUÁNTICA // CODEX</span>
+    <span id="lblQubits">4 QUBITS</span>
+    <span>ALGORITMO DE GROVER (1996) // ACELERACIÓN O(√N)</span>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
